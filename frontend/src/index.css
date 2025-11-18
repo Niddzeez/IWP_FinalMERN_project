@@ -8,7 +8,7 @@
   padding: 0;
 }
 
-:root {
+/* :root {
   --bg-primary: #152935;
   --bg-secondary: #152935;
   --border-color: #698ea2;
@@ -17,6 +17,36 @@
   --primary-accent: #e4a576;
   --primary-accent-hover: #f0b080;
   --error: #e7195a;
+} */
+
+:root {
+  --primary-accent: #2A4B8D;
+  --primary-accent-hover: #3A62B8;
+
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F4F7FA;
+  --bg-tertiary: #E0E0E0;
+
+  --text-primary: #1A1A1A;
+  --text-secondary: #555555;
+  --text-light: #FFFFFF;
+
+  --border-color: #E0E0E0;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+
+  --error: #C95B4A;
+  --success: #5A9A94;
+  --warning: #D9B230;
+
+  --status-submitted: #D9B230;
+  --status-in-progress: #5A9A94;
+  --status-resolved: #2A4B8D;
+  --status-completed: #1A1A1A;
+  --status-pending: #D98B94;
+  --status-missed: #C95B4A;
+
+  --font-family-primary: "Poppins", sans-serif;
+  --font-size-base: 1rem;
 }
 
 body {
