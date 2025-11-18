@@ -1,219 +1,103 @@
-let mockComplaints = [
-  // --- Kalpana Chawla ---
-  {
-    id: 'c1001',
-    title: 'Leaking Faucet in Room 201',
-    description: 'The tap in the bathroom won\'t stop dripping.',
-    room: 'KC-201',
-    category: 'Plumbing',
-    status: 'Submitted',
-    submittedBy: 's-kc101',
-    createdAt: new Date('2025-11-18T09:30:00Z').toISOString(),
-    scheduledFor: null,
-    votes: 12,
-    hostelId: 'kalpana-chawla'
-  },
-  {
-    id: 'c1002',
-    title: 'Wi-Fi not working on 3rd floor',
-    description: 'The Wi-Fi router on the 3rd-floor landing seems to be down.',
-    room: 'KC-305',
-    category: 'Internet',
-    status: 'In Progress',
-    submittedBy: 's-kc101',
-    createdAt: new Date('2025-11-16T11:00:00Z').toISOString(),
-    scheduledFor: new Date('2025-11-18T14:00:00Z').toISOString(),
-    votes: 28,
-    hostelId: 'kalpana-chawla'
-  },
-  // --- Anandi Gopal Joshi ---
-  {
-    id: 'c1003',
-    title: 'Broken window pane',
-    description: 'Window pane in common room is shattered.',
-    room: 'AGJ-Common',
-    category: 'Carpentry',
-    status: 'Submitted',
-    submittedBy: 's-aj101',
-    createdAt: new Date('2025-11-17T14:15:00Z').toISOString(),
-    scheduledFor: null,
-    votes: 5,
-    hostelId: 'anandi-joshi'
-  },
-  // --- C.V.Raman ---
-  {
-    id: 'c1004',
-    title: 'Clogged drain in shower',
-    description: 'Water is not draining in the 2nd floor west wing shower.',
-    room: 'CVR-2W',
-    category: 'Plumbing',
-    status: 'Submitted',
-    submittedBy: 's-cv101',
-    createdAt: new Date('2025-11-17T08:00:00Z').toISOString(),
-    scheduledFor: null,
-    votes: 8,
-    hostelId: 'cv-raman'
-  },
-  // --- J.C.Bose ---
-  {
-    id: 'c1005',
-    title: 'Pest control needed for Room 105',
-    description: 'There are ants in the kitchen area of Room 105.',
-    room: 'JCB-105',
-    category: 'Pest Control',
-    status: 'In Progress',
-    submittedBy: 's-jc101',
-    createdAt: new Date('2025-11-18T08:00:00Z').toISOString(),
-    scheduledFor: new Date('2025-11-19T10:00:00Z').toISOString(),
-    votes: 2,
-    hostelId: 'jc-bose'
-  },
-  // --- Homi Baba ---
-  {
-    id: 'c1006',
-    title: 'AC unit making loud noises',
-    description: 'The AC in the study hall is very loud and disruptive.',
-    room: 'HB-Study',
-    category: 'Electrical',
-    status: 'Resolved',
-    submittedBy: 's-hb101',
-    createdAt: new Date('2025-11-15T08:00:00Z').toISOString(),
-    scheduledFor: new Date('2025-11-16T10:00:00Z').toISOString(),
-    votes: 1,
-    hostelId: 'homi-baba'
-  }
-];
+import axios from 'axios';
 
-let mockMaintenanceChecks = [
-  {
-    id: 'm2001',
-    title: 'Fire Extinguisher Check - Wing A',
-    status: 'Pending',
-    scheduledFor: new Date('2025-11-20T10:00:00Z').toISOString(),
-    hostelId: 'kalpana-chawla'
-  },
-  {
-    id: 'm2002',
-    title: 'Water Filter Cleaning - Mess',
-    status: 'Completed',
-    scheduledFor: new Date('2025-11-15T15:00:00Z').toISOString(),
-    hostelId: 'kalpana-chawla'
-  },
-  {
-    id: 'm2003',
-    title: 'Gym Equipment Inspection',
-    status: 'Pending',
-    scheduledFor: new Date('2025-11-18T10:00:00Z').toISOString(),
-    hostelId: 'anandi-joshi'
-  },
-  {
-    id: 'm2004',
-    title: 'Rooftop Water Tank Cleaning',
-    status: 'Pending',
-    scheduledFor: new Date('2025-11-17T10:00:00Z').toISOString(),
-    hostelId: 'cv-raman'
-  },
-  {
-    id: 'm2005',
-    title: 'Solar Panel Inspection',
-    status: 'Pending',
-    scheduledFor: new Date('2025-11-22T10:00:00Z').toISOString(),
-    hostelId: 'jc-bose'
-  },
-  {
-    id: 'm2006',
-    title: 'Lab Safety Shower Test',
-    status: 'Pending',
-    scheduledFor: new Date('2025-11-21T10:00:00Z').toISOString(),
-    hostelId: 'homi-baba'
-  }
-];
+// This is the URL of your backend server
+const API_URL = 'http://localhost:5000/api'; 
 
-
-class ComplaintService {
-
-  static async getAllComplaints(hostelId) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (!hostelId) {
-          return resolve([]);
-        }
-        const cleanHostelId = hostelId.toLowerCase().trim();
-        const complaints = mockComplaints.filter(c => 
-          c.hostelId.toLowerCase().trim() === cleanHostelId
-        );
-        resolve([...complaints]);
-      }, 500);
-    });
-  }
-
-  static async getComplaintById(id) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const complaint = mockComplaints.find(c => c.id === id);
-        if (complaint) {
-          resolve(complaint);
-        } else {
-          reject(new Error('Complaint not found'));
-        }
-      }, 300);
-    });
-  }
+// --- Helper function to get the token ---
+// It assumes you save your user's info in localStorage after login
+const getToken = () => {
+  // Check if 'userInfo' exists in localStorage
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   
-  static async createComplaint(complaintData, hostelId) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newComplaint = {
-          ...complaintData,
-          id: `c${Math.floor(Math.random() * 9000) + 1000}`,
-          status: 'Submitted',
-          createdAt: new Date().toISOString(),
-          votes: 1,
-          hostelId: hostelId
-        };
-        mockComplaints.unshift(newComplaint);
-        resolve(newComplaint);
-      }, 700);
-    });
+  // Return the token, or null if it's not there
+  return userInfo ? userInfo.token : null; 
+};
+
+/**
+ * Gets all complaints for the logged-in user.
+ * This is a REAL API call.
+ */
+const getAllComplaints = async () => {
+  const token = getToken();
+
+  // If there's no token, we can't get complaints
+  if (!token) {
+    console.warn('No login token found, returning empty list.');
+    return []; // Return an empty array so the page doesn't crash
   }
 
-  static async updateComplaintStatus(id, newStatus) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const complaintIndex = mockComplaints.findIndex(c => c.id === id);
-        if (complaintIndex > -1) {
-          mockComplaints[complaintIndex].status = newStatus;
-          resolve(mockComplaints[complaintIndex]);
-        } else {
-          reject(new Error('Complaint not found for update'));
-        }
-      }, 400);
-    });
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`, // <-- Send the token to the backend
+    },
+  };
+
+  try {
+    // Make the GET request to your backend
+    const { data } = await axios.get(`${API_URL}/complaints`, config);
+    return data;
+  } catch (error) {
+    console.error('Error fetching complaints:', error.response ? error.response.data : error.message);
+    throw error;
   }
-  
-  static async deleteComplaint(id) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        mockComplaints = mockComplaints.filter(c => c.id !== id);
-        resolve({ success: true });
-      }, 500);
-    });
+};
+
+/**
+ * Creates a new complaint.
+ * This is a REAL API call.
+ */
+const createComplaint = async (complaintData) => {
+  const token = getToken();
+
+  if (!token) {
+    throw new Error('No login token found. Please log in again.');
   }
 
-  static async getMaintenanceChecks(hostelId) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (!hostelId) {
-          return resolve([]);
-        }
-        const cleanHostelId = hostelId.toLowerCase().trim();
-        const checks = mockMaintenanceChecks.filter(c => 
-          c.hostelId.toLowerCase().trim() === cleanHostelId
-        );
-        resolve([...checks]);
-      }, 500);
-    });
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // <-- Send the token
+    },
+  };
+
+  try {
+    // Make the POST request to your backend
+    const { data } = await axios.post(
+      `${API_URL}/complaints`, 
+      complaintData, 
+      config
+    );
+    return data;
+  } catch (error) {
+    console.error('Error creating complaint:', error.response ? error.response.data : error.message);
+    throw error;
   }
-}
+};
+
+// --- (You can add your other REAL API calls here) ---
+// For example, to get a single complaint:
+const getComplaintById = async (id) => {
+  const token = getToken();
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  const { data } = await axios.get(`${API_URL}/complaints/${id}`, config);
+  return data;
+};
+
+// To vote on a complaint:
+const voteOnComplaint = async (id) => {
+  const token = getToken();
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  const { data } = await axios.post(`${API_URL}/complaints/vote/${id}`, {}, config);
+  return data;
+};
+
+// --- EXPORT THE REAL SERVICE ---
+const ComplaintService = {
+  getAllComplaints,
+  createComplaint,
+  getComplaintById,
+  voteOnComplaint,
+  // (add getMaintenanceChecks when you build that API)
+};
 
 export default ComplaintService;
