@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import './ComplaintCard.css';
 
-function ComplaintCard({ complaint }) {
+function ComplaintCard({ complaint, onClick }) {
   const [votes, setVotes] = useState(complaint.votes || 0);
   const [isVoted, setIsVoted] = useState(false);
 
@@ -11,7 +10,8 @@ function ComplaintCard({ complaint }) {
     day: 'numeric'
   });
 
-  const handleUpvote = () => {
+  const handleUpvote = (e) => {
+    e.stopPropagation();
     if (!isVoted) {
       setVotes(votes + 1);
       setIsVoted(true);
@@ -21,8 +21,12 @@ function ComplaintCard({ complaint }) {
     }
   };
 
+  const handleCardClick = () => {
+    onClick(complaint.id);
+  };
+
   return (
-    <div className="complaint-card">
+    <div className="complaint-card" onClick={handleCardClick}>
       <div className="card-header">
         <span className="card-category">{complaint.category}</span>
         <span className={`status-tag status-${complaint.status.toLowerCase().replace(' ', '-')}`}>
@@ -46,9 +50,6 @@ function ComplaintCard({ complaint }) {
         </button>
         <span className="vote-count">{votes} votes</span>
       </div>
-      <Link to={`/complaint/${complaint.id}`} className="details-link">
-        View Details & Status
-      </Link>
     </div>
   );
 }

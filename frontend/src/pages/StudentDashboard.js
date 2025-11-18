@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ComplaintService from '../services/ComplaintService';
 import ComplaintList from '../components/ComplaintList';
+import ComplaintDetailPanel from '../components/ComplaintDetailPanel';
 import { useNavigate } from 'react-router-dom';
+import { COMPLAINT_CATEGORIES } from '../config';
+import { useAuth } from '../context/AuthContext';
 import './StudentDashboard.css';
 
-const extractCategories = (complaints) => {
-  const categories = new Set(complaints.map(c => c.category));
-  return ['All', ...categories];
-};
+const filterCategories = ['All', ...COMPLAINT_CATEGORIES];
 
 function StudentDashboard() {
   const [allComplaints, setAllComplaints] = useState([]);
@@ -15,15 +15,16 @@ function StudentDashboard() {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [searchTerm, setSearchTerm] = useState('');
-  const [categories, setCategories] = useState(['All']);
+  const [selectedComplaintId, setSelectedComplaintId] = useState(null);
+  
   const navigate = useNavigate();
+  const { currentUser, logout } = useAuth();
 
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
         const data = await ComplaintService.getAllComplaints();
         setAllComplaints(data);
-        setCategories(extractCategories(data));
       } catch (error) {
         console.error("Failed to fetch complaints:", error);
       }
@@ -32,7 +33,7 @@ function StudentDashboard() {
   }, []);
   
   const handleLogout = () => {
-    console.log('Logging out...');
+    logout();
     navigate('/login');
   };
 
@@ -64,8 +65,11 @@ function StudentDashboard() {
   return (
     <main className="dashboard-page-container pages">
       <header className="dashboard-header">
-        <h2>My Dashboard</h2>
-        <div className="header-controls-wrapper">
+        <div className="header-title-group">
+          <h2>Student Dashboard</h2>
+          <p className="dashboard-subtitle">{currentUser?.hostelName || 'Hostel Portal'}</p>
+        </div>
+        <div className="header-right-group">
           <div className="filter-buttons">
             <button onClick={() => setStatusFilter('All')} className={statusFilter === 'All' ? 'active' : ''}>All</button>
             <button onClick={() => setStatusFilter('Submitted')} className={statusFilter === 'Submitted' ? 'active' : ''}>Open</button>
@@ -76,7 +80,7 @@ function StudentDashboard() {
         </div>
       </header>
       
-      <div className="dashboard-controls">
+      <div className="dashboard-controls-row">
         <input
           type="text"
           placeholder="Search complaints..."
@@ -84,10 +88,11 @@ function StudentDashboard() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        
         <div className="select-group">
           <label htmlFor="category-filter">Category</label>
           <select id="category-filter" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+            {filterCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
           </select>
         </div>
         <div className="select-group">
@@ -98,11 +103,22 @@ function StudentDashboard() {
             <option value="priority">Priority</option>
           </select>
         </div>
+
       </div>
 
-      <ComplaintList complaints={processedComplaints} />
+      <ComplaintList 
+        complaints={processedComplaints}
+        onCardClick={(id) => setSelectedComplaintId(id)}
+      />
 
       <button className="fab" onClick={() => navigate('/new-complaint')} title="Submit New Complaint">+</button>
+      
+      {selectedComplaintId && (
+        <ComplaintDetailPanel
+          complaintId={selectedComplaintId}
+          onClose={() => setSelectedComplaintId(null)}
+        />
+      )}
     </main>
   );
 }

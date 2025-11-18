@@ -1,35 +1,28 @@
 import React, { useState } from 'react';
 import AuthService from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
-
-// Import the styles for this component
+import { useAuth } from '../context/AuthContext';
 import './LoginPage.css';
 
 function LoginPage() {
-  // States for the form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  // States for loading and error messages
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  // This function runs when the user clicks the "Login" button
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Stop the page from reloading
+    event.preventDefault();
     setIsLoading(true);
     setError(null);
 
     try {
-      // Call the login method from our mock service
       const data = await AuthService.login(email, password);
+      
+      login(data.user);
 
-      setIsLoading(false);
-      console.log("Login successful:", data.user);
-
-      // This is where you'll handle the redirect
       if (data.user.role === 'student') {
         navigate('/student-dashboard');
       } else if (data.user.role === 'warden') {
@@ -77,11 +70,10 @@ function LoginPage() {
             />
           </div>
 
-          <a href="#" className="forgot-password-link">
+         <a href="#" className="forgot-password-link">
             Forgot password
           </a>
 
-          {/* Show an error message if one exists */}
           {error && <p className="error-message">{error}</p>}
 
           <button type="submit" className="login-button" disabled={isLoading}>

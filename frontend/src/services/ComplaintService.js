@@ -7,7 +7,8 @@ let mockComplaints = [
     category: 'Plumbing',
     status: 'Submitted',
     submittedBy: 's101',
-    createdAt: new Date('2025-11-15T09:30:00Z').toISOString(),
+    createdAt: new Date('2025-11-18T09:30:00Z').toISOString(),
+    scheduledFor: null,
     votes: 12
   },
   {
@@ -19,6 +20,7 @@ let mockComplaints = [
     status: 'In Progress',
     submittedBy: 's102',
     createdAt: new Date('2025-11-16T11:00:00Z').toISOString(),
+    scheduledFor: new Date('2025-11-18T14:00:00Z').toISOString(),
     votes: 28
   },
   {
@@ -30,6 +32,7 @@ let mockComplaints = [
     status: 'Resolved',
     submittedBy: 's103',
     createdAt: new Date('2025-11-14T14:15:00Z').toISOString(),
+    scheduledFor: new Date('2025-11-15T10:00:00Z').toISOString(),
     votes: 5
   },
   {
@@ -38,9 +41,10 @@ let mockComplaints = [
     description: 'Water is not draining in the 2nd floor west wing shower.',
     room: '2W Shower',
     category: 'Plumbing',
-    status: 'In Progress',
+    status: 'Submitted',
     submittedBy: 's104',
     createdAt: new Date('2025-11-17T08:00:00Z').toISOString(),
+    scheduledFor: null,
     votes: 8
   }
 ];

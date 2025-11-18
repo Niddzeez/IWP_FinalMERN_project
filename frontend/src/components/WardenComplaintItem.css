@@ -1,0 +1,73 @@
+.warden-item-card {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.warden-item-card:hover {
+  background: rgba(204, 213, 210, 0.05);
+}
+
+.warden-item-card.selected {
+  background: rgba(228, 165, 118, 0.1);
+  border-color: var(--primary-accent);
+}
+
+.warden-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.warden-item-room {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.status-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: 99px;
+}
+
+.status-tag.status-submitted {
+  background: rgba(228, 165, 118, 0.1);
+  color: var(--primary-accent);
+}
+.status-tag.status-in-progress {
+  background: rgba(105, 142, 162, 0.2);
+  color: #698ea2;
+}
+.status-tag.status-resolved {
+  background: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+}
+
+.warden-item-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.warden-item-meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.warden-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}

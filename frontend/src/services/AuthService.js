@@ -1,7 +1,6 @@
 class AuthService {
 
   static async login(email, password) {
-
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (email === 'student@hostel.com' && password === 'password123') {
@@ -11,7 +10,8 @@ class AuthService {
             user: { 
               id: 's101', 
               name: 'Test Student', 
-              role: 'student' 
+              role: 'student',
+              hostelName: 'Springfield Hostels'
             }
           });
         } else if (email === 'warden@hostel.com' && password === 'password123') {
@@ -21,7 +21,8 @@ class AuthService {
             user: { 
               id: 'w201', 
               name: 'Test Warden', 
-              role: 'warden' 
+              role: 'warden',
+              hostelName: 'Springfield Hostels'
             }
           });
         } else {

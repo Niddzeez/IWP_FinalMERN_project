@@ -10,3 +10,10 @@
   text-align: center;
   padding: 4rem 0;
 }
+
+@media (max-width: 600px) {
+  .complaint-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
